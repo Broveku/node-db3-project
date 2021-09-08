@@ -27,14 +27,29 @@ function find(step_id) { // EXERCISE A
  
 }
 
-function findById(scheme_id) { // EXERCISE B
-  const result =  db('scheme as sc')
+async function findById(scheme_id) { // EXERCISE B
+  const rows= await db('scheme as sc')
   .LeftJoin('steps as st', 'sc.scheme_id', '=', 'st.scheme_id')
   .where('sc.scheme_id', scheme_id)
-  .select('sc.*, sc.scheme_name')
+  .select('sc.*', 'sc.scheme_name', 'sc.scheme_id')
   .orderBy('st.step_number')
   
-    return result
+  const result = {
+    scheme_id: rows[0].scheme_id,
+    scheme_name: rows[0].scheme_name,
+    steps: []
+  }
+  
+  rows.array.forEach(row => {
+    if (row.step_id) {
+      result.steps.push({
+        step_id: row.step_id,
+        step_number: row.step_number,
+        instructions: row.instructions
+      })
+    }
+  });
+  return result
   /*
     1B- Study the SQL query below running it in SQLite Studio against `data/schemes.db3`:
 
