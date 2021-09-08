@@ -3,9 +3,10 @@ const db = require('../../data/db-config')
 
 async function find(step_id) { // EXERCISE A
   const result = await db('scheme as sc')
-  .join('steps as st', 'sc.scheme_id', '=', 'st.scheme_id')
-  .select('sc.id as scheme_id', 'scheme_name', 'st.step_id as number_of_steps')
-  .where('st.id', step_id)
+  .LeftJoin('steps as st', 'sc.scheme_id', '=', 'st.scheme_id')
+  .select('sc.*')
+  .count('st.step_id as number_of_steps')
+  .groupBy('sc.scheme_id')
 
   /*
     1A- Study the SQL query below running it in SQLite Studio against `data/schemes.db3`.
