@@ -1,6 +1,7 @@
 const Scheme = require('../schemes/scheme-model')
 
 
+
 /*
   If `scheme_id` does not exist in the database:
 
@@ -13,7 +14,7 @@ const checkSchemeId = async (req, res, next) => {
   try {
     const scheme = await Scheme.findById(req.params.id)
       if (!scheme) {
-        res.status(404).json({message: 'id not found'})
+        res.status(404).json({message: 'id is not found'})
       }else {
         req.scheme = scheme
         next()
